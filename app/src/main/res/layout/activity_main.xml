@@ -8,12 +8,12 @@
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="132dp"
+        android:layout_height="128dp"
         android:text="TextView" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="245dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
@@ -24,12 +24,26 @@
             android:text="新建笔记" />
 
         <Button
+            android:id="@+id/btnStatistic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="查看统计" />
+
+        <Button
             android:id="@+id/btnLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="退出登录" />
     </LinearLayout>
+
+    <!-- 新增搜索框 -->
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="搜索标题或内容"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNotes"

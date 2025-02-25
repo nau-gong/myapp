@@ -18,8 +18,13 @@ class NoteRepository(private val userDao: UserDao, private val noteDao: NoteDao)
         return userDao.getUser(username, sha256(password))
     }
 
-    // 笔记操作
-    fun getNotes(userId: Int): LiveData<List<Note>> = noteDao.getNotesByUser(userId)
+    fun getNotes(userId: Int): LiveData<List<Note>> {
+        return noteDao.getNotesByUser(userId)
+    }
+
+    fun searchNotes(userId: Int, query: String): LiveData<List<Note>> {
+        return noteDao.searchNotes(userId, query)
+    }
 
     suspend fun saveNote(note: Note) {
         if (note.id == 0) {
@@ -37,4 +42,5 @@ class NoteRepository(private val userDao: UserDao, private val noteDao: NoteDao)
         val bytes = MessageDigest.getInstance("SHA-256").digest(input.toByteArray())
         return bytes.joinToString("") { "%02x".format(it) }
     }
+
 }

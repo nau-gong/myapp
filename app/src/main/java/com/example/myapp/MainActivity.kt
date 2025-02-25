@@ -2,9 +2,11 @@ package com.example.myapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myapp.databinding.ActivityMainBinding
 
 
@@ -24,7 +26,9 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         observeNotes()
         setupButtons()
+        setupSearchView()
     }
+
 
     private fun setupRecyclerView() {
         adapter = NoteAdapter { note ->
@@ -33,6 +37,9 @@ class MainActivity : AppCompatActivity() {
                 putExtra("NOTE_ID", note.id)
                 putExtra("TITLE", note.title)
                 putExtra("CONTENT", note.content)
+                putExtra("CATEGORY", note.category)
+                putExtra("IS_FAVORITE", note.isFavorite)
+                putExtra("PIC", note.pic)
             }
             startActivityForResult(intent, REQUEST_EDIT_NOTE)
         }
@@ -40,9 +47,24 @@ class MainActivity : AppCompatActivity() {
         binding.rvNotes.adapter = adapter
     }
 
-    private fun observeNotes() {
-        viewModel.getNotes(userId).observe(this) { notes ->
+    private fun observeNotes(query: String = "") {
+        viewModel.loadNotes(userId, query).observe(this) { notes ->
             adapter.submitList(notes)
+        }
+    }
+
+    private fun setupSearchView() {
+        findViewById<SearchView>(R.id.searchView).apply {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean = false
+
+                override fun onQueryTextChange(newText: String): Boolean {
+
+                    observeNotes(newText)
+                    return true
+                }
+            }
+            )
         }
     }
 
@@ -56,15 +78,14 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+        binding.btnStatistic.setOnClickListener {
+            startActivity(Intent(this, StatisticAnalysisActivity::class.java).apply {
+                putExtra("USER_ID", userId)
+            })
+        }
+
         binding.btnLogout.setOnClickListener {
             finish()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK) {
-            observeNotes() // 刷新列表
         }
     }
 

@@ -20,6 +20,34 @@
         android:hint="标题"
         android:textSize="18sp"/>
 
+    <!-- 分类选择（下拉框） -->
+    <Spinner
+        android:id="@+id/spinnerCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"/>
+
+    <!-- 收藏开关 -->
+    <CheckBox
+        android:id="@+id/cbFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="是否收藏"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/btnPic"
+        android:text="选择图片"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/ivPic"
+        android:visibility="gone"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
+
     <EditText
         android:id="@+id/etContent"
         android:layout_width="match_parent"

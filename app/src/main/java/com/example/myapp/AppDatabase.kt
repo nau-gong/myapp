@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [User::class, Note::class], version = 1)
+@Database(entities = [User::class, Note::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun noteDao(): NoteDao
@@ -21,7 +21,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "note_database"
-                ).fallbackToDestructiveMigration() // 简单示例，允许破坏性迁移
+                ).fallbackToDestructiveMigration() // 允许破坏性迁移
                     .build()
                 INSTANCE = instance
                 instance

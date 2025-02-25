@@ -2,6 +2,8 @@ package com.example.myapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -16,12 +18,22 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Prefs.init(applicationContext)
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[NoteViewModel::class.java]
 
         binding.btnLogin.setOnClickListener { attemptLogin() }
         binding.btnRegister.setOnClickListener { attemptRegister() }
+
+        binding.btnSettings.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
+
+        applySettings()
+
     }
 
     private fun attemptLogin() {
@@ -59,4 +71,29 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun applySettings() {
+        // 应用背景色
+        window.decorView.setBackgroundColor(Prefs.bgColor)
+
+        // 应用字体大小和颜色
+        val fontSize = Prefs.fontSize
+        val textColor = Prefs.textColor
+
+        listOf<TextView>(
+            findViewById(R.id.etUsername),
+            findViewById(R.id.etPassword),
+            findViewById(R.id.btnLogin),
+            findViewById(R.id.btnRegister)
+        ).forEach {
+            it.textSize = fontSize / resources.displayMetrics.scaledDensity
+            it.setTextColor(textColor)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        applySettings() // 从设置界面返回时刷新
+    }
+
 }
