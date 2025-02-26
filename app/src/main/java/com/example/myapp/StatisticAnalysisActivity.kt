@@ -35,24 +35,21 @@ class StatisticAnalysisActivity : AppCompatActivity() {
     private fun loadStatisticsData() {
         // 获取所有笔记数据
         viewModel.loadNotes(userId).observe(this, Observer { notes ->
+            // 生成随机笔记并与现有笔记合并
+            val randomNotes = generateRandomNotes(userId)
+
+            val allNotes = notes + randomNotes  // 合并现有笔记和随机生成的笔记
+            //val allNotes = notes
             // 按日期统计笔记数量
-            val dailyData = getDailyNoteCount(notes)
+            val dailyData = getDailyNoteCount(allNotes)
             updateBarChart(dailyData)
         })
-
-        // 测试数据
-//        val notes = generateRandomNotes(userId)
-//
-//        // 按日期统计笔记数量
-//        val dailyData = getDailyNoteCount(notes)
-//        updateBarChart(dailyData)
     }
 
     private fun generateRandomNotes(userId: Int): List<Note> {
         // 模拟生成 30 条笔记
         val notes = mutableListOf<Note>()
         val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
         for (i in 0 until 30) {
             // 随机生成一个日期

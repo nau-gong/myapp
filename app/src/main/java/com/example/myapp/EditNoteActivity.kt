@@ -4,6 +4,7 @@ import android.R
 import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Base64
 import android.view.View
@@ -47,14 +48,14 @@ class EditNoteActivity : AppCompatActivity() {
 
         setupCategorySpinner()
         setupButtons()
+        setupRichEditor()
         loadNoteData()
     }
 
     private fun loadNoteData() {
         if (noteId != 0) {
             binding.etTitle.setText(intent.getStringExtra("TITLE"))
-            binding.etContent.setText(intent.getStringExtra("CONTENT"))
-
+            binding.editor.html = intent.getStringExtra("CONTENT")
             binding.cbFavorite.isChecked = isFavorite
             category?.let {
                 binding.spinnerCategory.setSelection(categories.indexOf(it).takeIf { it >= 0 } ?: 0)
@@ -80,7 +81,7 @@ class EditNoteActivity : AppCompatActivity() {
     private fun setupButtons() {
         binding.btnSave.setOnClickListener {
             val title = binding.etTitle.text.toString()
-            val content = binding.etContent.text.toString()
+            val content = binding.editor.html
             val category = binding.spinnerCategory.selectedItem.toString()
             isFavorite = binding.cbFavorite.isChecked
 
@@ -107,6 +108,138 @@ class EditNoteActivity : AppCompatActivity() {
                     startForProfileImageResult.launch(intent)
                 }
         }
+    }
+
+    private fun setupRichEditor(){
+        binding.editor.setEditorFontSize(22)
+        binding.editor.setEditorFontColor(Color.BLACK)
+        binding.editor.setEditorBackgroundColor(Color.WHITE)
+        binding.editor.setEditorHeight(200)
+        binding.editor.setPadding(10, 10, 10, 10)
+        binding.editor.setInputEnabled(true)
+        binding.editor.setPlaceholder("Type something...")
+        
+        
+
+        binding.actionUndo.setOnClickListener { binding.editor.undo() }
+
+        binding.actionRedo.setOnClickListener { binding.editor.redo() }
+
+        binding.actionBold.setOnClickListener { binding.editor.setBold() }
+
+        binding.actionItalic.setOnClickListener { binding.editor.setItalic() }
+
+        binding.actionSubscript.setOnClickListener { binding.editor.setSubscript() }
+
+        binding.actionSuperscript.setOnClickListener { binding.editor.setSuperscript() }
+
+        binding.actionStrikethrough.setOnClickListener { binding.editor.setStrikeThrough() }
+
+        binding.actionUnderline.setOnClickListener { binding.editor.setUnderline() }
+
+        binding.actionHeading1.setOnClickListener {
+            binding.editor.setHeading(
+                1
+            )
+        }
+
+        binding.actionHeading2.setOnClickListener {
+            binding.editor.setHeading(
+                2
+            )
+        }
+
+        binding.actionHeading3.setOnClickListener {
+            binding.editor.setHeading(
+                3
+            )
+        }
+
+        binding.actionHeading4.setOnClickListener {
+            binding.editor.setHeading(
+                4
+            )
+        }
+
+        binding.actionHeading5.setOnClickListener {
+            binding.editor.setHeading(
+                5
+            )
+        }
+
+        binding.actionHeading6.setOnClickListener {
+            binding.editor.setHeading(
+                6
+            )
+        }
+
+        binding.actionTxtColor.setOnClickListener(object : View.OnClickListener {
+            private var isChanged = false
+
+            override fun onClick(v: View) {
+                binding.editor.setTextColor(if (isChanged) Color.BLACK else Color.RED)
+                isChanged = !isChanged
+            }
+        })
+
+        binding.actionBgColor.setOnClickListener(object : View.OnClickListener {
+            private var isChanged = false
+
+            override fun onClick(v: View) {
+                binding.editor.setTextBackgroundColor(if (isChanged) Color.TRANSPARENT else Color.YELLOW)
+                isChanged = !isChanged
+            }
+        })
+
+        binding.actionIndent.setOnClickListener { binding.editor.setIndent() }
+
+        binding.actionOutdent.setOnClickListener { binding.editor.setOutdent() }
+
+        binding.actionAlignLeft.setOnClickListener { binding.editor.setAlignLeft() }
+
+        binding.actionAlignCenter.setOnClickListener { binding.editor.setAlignCenter() }
+
+        binding.actionAlignRight.setOnClickListener { binding.editor.setAlignRight() }
+
+        binding.actionBlockquote.setOnClickListener { binding.editor.setBlockquote() }
+
+        binding.actionInsertBullets.setOnClickListener { binding.editor.setBullets() }
+
+        binding.actionInsertNumbers.setOnClickListener { binding.editor.setNumbers() }
+
+        binding.actionInsertImage.setOnClickListener {
+            binding.editor.insertImage(
+                "https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg",
+                "dachshund", 320
+            )
+        }
+
+        binding.actionInsertYoutube.setOnClickListener {
+            binding.editor.insertYoutubeVideo(
+                "https://www.youtube.com/embed/pS5peqApgUA"
+            )
+        }
+
+        binding.actionInsertAudio.setOnClickListener {
+            binding.editor.insertAudio(
+                "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3"
+            )
+        }
+
+        binding.actionInsertVideo.setOnClickListener {
+            binding.editor.insertVideo(
+                "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_10MB.mp4",
+                360
+            )
+        }
+
+        binding.actionInsertLink.setOnClickListener {
+            binding.editor.insertLink(
+                "https://github.com/wasabeef",
+                "wasabeef"
+            )
+        }
+        binding.actionInsertCheckbox.setOnClickListener { binding.editor.insertTodo() }
     }
 
     private val startForProfileImageResult =

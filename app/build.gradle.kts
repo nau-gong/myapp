@@ -80,4 +80,7 @@ dependencies {
 
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.github.dhaval2404:imagepicker:2.1")
+
+    implementation("jp.wasabeef:richeditor-android:2.0.0")
+
 }

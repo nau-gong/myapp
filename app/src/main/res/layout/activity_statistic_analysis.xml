@@ -6,9 +6,17 @@
     android:padding="16dp">
 
     <!-- 显示柱状图 -->
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:text="TextView" />
+
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
         android:layout_width="match_parent"
         android:layout_height="300dp" />
+
+
 
 </LinearLayout>
